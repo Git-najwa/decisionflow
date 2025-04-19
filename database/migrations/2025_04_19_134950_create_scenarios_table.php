@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('scenarios', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

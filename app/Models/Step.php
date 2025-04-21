@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
-class Scenario extends Model
+class Step extends Model
 {
-
     use HasFactory;
-    protected $fillable = ['title', 'description'];
 
-    public function steps()
+    protected $fillable = ['scenario_id', 'content'];
+
+    public function scenario()
     {
-        return $this->hasMany(Step::class);
+        return $this->belongsTo(Scenario::class);
     }
 }

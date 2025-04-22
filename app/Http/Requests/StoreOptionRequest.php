@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreScenarioRequest extends FormRequest
+class StoreOptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,9 @@ class StoreScenarioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'step_id' => 'required|exists:steps,id',
+            'text' => 'required|string|max:255',
+            'next_step_id' => 'nullable|exists:steps,id',
         ];
     }
 }

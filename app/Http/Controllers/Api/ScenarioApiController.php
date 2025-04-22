@@ -27,7 +27,8 @@ class ScenarioApiController extends Controller
     // GET /api/scenarios/{id}
     public function show($id)
     {
-        return response()->json(Scenario::findOrFail($id));
+        $scenario = Scenario::with('steps')->findOrFail($id);
+        return response()->json($scenario);
     }
 
     // PUT /api/scenarios/{id}

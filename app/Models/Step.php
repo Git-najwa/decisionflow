@@ -16,4 +16,9 @@ class Step extends Model
     {
         return $this->belongsTo(Scenario::class);
     }
+
+    public function options()
+    {
+        return $this->hasMany(Option::class);
+    }
 }

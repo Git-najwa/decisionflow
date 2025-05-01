@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Scenario;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreScenarioRequest;
+use Illuminate\Support\Facades\Auth;
 
 
 class ScenarioApiController extends Controller
@@ -19,7 +20,17 @@ class ScenarioApiController extends Controller
     // POST /api/scenarios
     public function store(StoreScenarioRequest $request)
     {
-        $scenario = Scenario::create($request->validated());
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non authentifié'], 401);
+        }
+
+        $scenario = $user->scenarios()->create($request->validated());
+
         return response()->json($scenario, 201);
     }
 
@@ -34,16 +45,31 @@ class ScenarioApiController extends Controller
     // PUT /api/scenarios/{id}
     public function update(StoreScenarioRequest $request, $id)
     {
-        $scenario = Scenario::findOrFail($id);
+        $scenario = Scenario::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if (!$scenario) {
+            return response()->json(['message' => 'Scénario introuvable ou non autorisé'], 404);
+        }
+
         $scenario->update($request->validated());
+
         return response()->json($scenario);
     }
 
 
     // DELETE /api/scenarios/{id}
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Scenario::findOrFail($id)->delete();
+        $scenario = Scenario::findOrFail($id);
+
+        if ($scenario->user_id !== $request->user()->id) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        $scenario->delete();
+
         return response()->json(null, 204);
     }
 }

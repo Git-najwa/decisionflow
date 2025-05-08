@@ -24,6 +24,25 @@ class StoreStepRequest extends FormRequest
         return [
             'scenario_id' => 'required|exists:scenarios,id',
             'content' => 'required|string',
+            'is_start' => 'boolean',
         ];
+    }
+
+
+    // contrainte pour éviter plusieurs étapes is_start=true dans un même scénario
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->boolean('is_start')) {
+                $scenarioId = $this->input('scenario_id');
+
+                $query = \App\Models\Step::where('scenario_id', $scenarioId)
+                    ->where('is_start', true);
+
+                if ($query->exists()) {
+                    $validator->errors()->add('is_start', 'Ce scénario a déjà une étape de départ.');
+                }
+            }
+        });
     }
 }

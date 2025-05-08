@@ -10,7 +10,7 @@ class Step extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['scenario_id', 'content'];
+    protected $fillable = ['scenario_id', 'content','is_start',];
 
     public function scenario()
     {

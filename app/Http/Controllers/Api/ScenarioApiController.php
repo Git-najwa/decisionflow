@@ -14,7 +14,10 @@ class ScenarioApiController extends Controller
     // GET /api/scenarios
     public function index()
     {
-        return response()->json(Scenario::all());
+        // return response()->json(Scenario::all());
+        return response()->json(
+            Scenario::with('steps.options')->get()
+        );
     }
 
     // POST /api/scenarios

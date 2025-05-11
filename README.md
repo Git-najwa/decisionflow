@@ -3,7 +3,7 @@
 Une application interactive où l’utilisateur est plongé dans des situations réalistes (entretien d’embauche, conflit professionnel, dilemme éthique), et doit faire des choix influençant la suite de l’histoire.
 Ce projet a été réalisé dans le cadre d’un module full-stack mêlant Laravel (backend) et Vue.js (frontend).
 
----
+
 
 ## 🛠️ Stack technique
 
@@ -13,7 +13,7 @@ Ce projet a été réalisé dans le cadre d’un module full-stack mêlant Larav
 * **Base de données** : SQLite
 * **API communication** : JSON
 
----
+
 
 ## 📚 Fonctionnalités
 
@@ -35,7 +35,7 @@ Ce projet a été réalisé dans le cadre d’un module full-stack mêlant Larav
 * Affichage clair des options à chaque étape
 * Navigation en temps réel sans rechargement
 
----
+
 
 ## 🚀 Installation
 
@@ -83,7 +83,7 @@ npm run dev
 
 > Accès à l’interface : `http://localhost:5173`
 
----
+
 
 ## 🔐 Utilisation API (avec Postman ou Axios)
 
@@ -93,14 +93,14 @@ npm run dev
 * `GET /api/scenarios/{id}` : récupérer un scénario complet (steps + options)
 * Naviguer dynamiquement selon les relations entre étapes
 
----
+
 
 ## 👤 Comptes test disponibles (via seed)
 
 * **Email** : `test@example.com`
 * **Mot de passe** : `password`
 
----
+
 
 ## 📁 Structure simplifiée
 
@@ -117,7 +117,7 @@ frontend/
 │   └── App.vue
 ```
 
----
+
 
 ## 📌 À propos
 

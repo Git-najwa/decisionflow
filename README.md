@@ -1,4 +1,4 @@
-# 🎮 Simulateur de Prise de Décision
+# 🧠 DecisionFlow- Simulateur de Prise de Décision
 
 Une application interactive où l’utilisateur est plongé dans des situations réalistes (entretien d’embauche, conflit professionnel, dilemme éthique), et doit faire des choix influençant la suite de l’histoire.
 Ce projet a été réalisé dans le cadre d’un module full-stack mêlant Laravel (backend) et Vue.js (frontend).

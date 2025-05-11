@@ -93,9 +93,13 @@ npm run dev
 * `GET /api/scenarios/{id}` : récupérer un scénario complet (steps + options)
 * Naviguer dynamiquement selon les relations entre étapes
 
+## 💼 Exemples de scénarios intégrés
+
+* **Première impression** : un entretien d’embauche 
+* **Le désaccord** : une gestion de conflit professionnel
 
 
-## 👤 Comptes test disponibles (via seed)
+## 👤 Comptes test disponibles 
 
 * **Email** : `test@example.com`
 * **Mot de passe** : `password`

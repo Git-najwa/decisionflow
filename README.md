@@ -1,66 +1,126 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎮 Simulateur de Prise de Décision
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Une application interactive où l’utilisateur est plongé dans des situations réalistes (entretien d’embauche, conflit professionnel, dilemme éthique), et doit faire des choix influençant la suite de l’histoire.
+Ce projet a été réalisé dans le cadre d’un module full-stack mêlant Laravel (backend) et Vue.js (frontend).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Stack technique
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **Backend** : Laravel 11 (API RESTful)
+* **Frontend** : Vue.js 3 + Vite
+* **Authentification** : Laravel Sanctum
+* **Base de données** : SQLite
+* **API communication** : JSON
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📚 Fonctionnalités
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Backend (Laravel)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+* Création de scénarios (`Scenario`), étapes (`Step`) et choix (`Option`)
+* Authentification (register / login / logout / me)
+* Middleware `auth:sanctum` pour protéger les routes sensibles
+* Contrainte métier : un seul `is_start = true` par scénario
+* Endpoints versionnés (`/api/...`)
+* Seeders avec 2 scénarios complets pré-remplis
+* Réponses API claires avec codes HTTP appropriés
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Frontend (Vue.js)
 
-## Laravel Sponsors
+* Affichage de tous les scénarios disponibles
+* Affichage du chapitre de départ (`is_start`)
+* Navigation entre étapes selon les choix (relation dynamique)
+* Affichage clair des options à chaque étape
+* Navigation en temps réel sans rechargement
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🚀 Installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 1. Cloner le projet
 
-## Contributing
+```bash
+git clone https://github.com/votre-utilisateur/simulateur-decision.git
+cd simulateur-decision
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 2. Backend (Laravel)
 
-## Code of Conduct
+```bash
+cd backend
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Installer les dépendances
+composer install
 
-## Security Vulnerabilities
+# Copier l'exemple d'environnement
+cp .env.example .env
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Générer la clé
+php artisan key:generate
 
-## License
+# Créer la base et migrer
+php artisan migrate:fresh --seed
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Lancer le serveur local
+php artisan serve
+```
+
+> Accès à l’API via : `http://127.0.0.1:8000/api`
+
+### 3. Frontend (Vue.js)
+
+```bash
+cd frontend
+
+# Installer les dépendances
+npm install
+
+# Lancer le projet
+npm run dev
+```
+
+> Accès à l’interface : `http://localhost:5173`
+
+---
+
+## 🔐 Utilisation API (avec Postman ou Axios)
+
+* `POST /api/register` : créer un compte
+* `POST /api/login` : récupérer le token
+* `GET /api/scenarios` : récupérer les scénarios disponibles
+* `GET /api/scenarios/{id}` : récupérer un scénario complet (steps + options)
+* Naviguer dynamiquement selon les relations entre étapes
+
+---
+
+## 👤 Comptes test disponibles (via seed)
+
+* **Email** : `test@example.com`
+* **Mot de passe** : `password`
+
+---
+
+## 📁 Structure simplifiée
+
+```bash
+backend/
+├── app/
+├── routes/api.php
+├── database/seeders/ScenarioSeeder.php
+frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── composables/
+│   └── App.vue
+```
+
+---
+
+## 📌 À propos
+
+Projet réalisé dans le cadre des cours de Développement de produit média et Web & Mobile UI  (HEIG) – simulateur narratif à choix multiples.
+Usage académique uniquement.
+

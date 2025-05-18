@@ -24,7 +24,9 @@ class StepApiController extends Controller
     // GET /api/steps/{id}
     public function show($id)
     {
-        return response()->json(Step::findOrFail($id));
+        return response()->json(
+        Step::with('options')->findOrFail($id)
+    );
     }
 
     // PUT /api/steps/{id}

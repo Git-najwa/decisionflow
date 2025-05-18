@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-gray-100 p-6">
     <TheHeader />
-    <LoginForm v-if="!isAuthenticated" @logged-in="handleLogin" />
-    <Scenarios v-else />
+    <router-view />
+    
   </div>
 </template>
 

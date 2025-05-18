@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { setDefaultHeaders, setDefaultBaseUrl } from '@/utils/fetchJson.js';
 import App from './App.vue';
+import router from './router/index.js'; // Importation du routeur
 
 function configureHttpClient() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
@@ -33,6 +34,7 @@ function configureHttpClient() {
 function initializeVueApp() {
     const app = createApp(App);
 
+    app.use(router); // Utilisation du routeur
     try {
         app.mount('#app');
     } catch (error) {

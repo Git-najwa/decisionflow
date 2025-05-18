@@ -8,7 +8,6 @@ import { fetchJson } from '@/utils/fetchJson';
  * @param {string} [options.url] - The URL to fetch (mandatory if using an object)
  * @param {object} [options.data=null] - The data to send (if any)
  * @param {string} [options.method=null] - The method to use (GET, POST, PUT, DELETE, etc.)
- *   If not specified, it will be GET if data is null, POST otherwise
  * @param {object} [options.headers={}] - The additional headers to send (if any)
  * @param {number} [options.timeout=5000] - Timeout in milliseconds
  * @param {string} [options.baseUrl=null] - The base URL to use for the request (optional)
@@ -23,6 +22,21 @@ export function useFetchJson(options) {
   const error = ref(null);
   const loading = ref(true);
 
+  const token = localStorage.getItem('token');
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+  // 🔧 Si options est une string, on le convertit
+  if (typeof options === 'string') {
+    options = { url: options };
+  }
+
+  // 🔐 Ajout automatique des headers d’auth
+  options.headers = {
+    ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+  };
+
   const { request, abort } = fetchJson(options);
   request
     .then(res => {
@@ -30,6 +44,9 @@ export function useFetchJson(options) {
       loading.value = false;
     })
     .catch(err => {
+      if (err?.status === 401) {
+        window.location.href = '/login';
+      }
       error.value = err;
       loading.value = false;
     });

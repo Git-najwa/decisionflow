@@ -1,39 +1,28 @@
 const defaultHeaders = {
   'Content-Type': 'application/json',
-  'X-Requested-With': 'XmlHttpRequest',
+  'X-Requested-With': 'XMLHttpRequest',
   'Accept': 'application/json',
 };
 
-let defaultBaseUrl = '';
+let defaultBaseUrl = ''; // Défini dynamiquement via setDefaultBaseUrl()
 
 /**
- * Update the default headers
- * @param {Object} headers - Headers to merge with the defaults for all requests
+ * Met à jour les headers par défaut.
  */
 export function setDefaultHeaders(headers) {
   Object.assign(defaultHeaders, headers);
 }
 
 /**
- * Set the default base URL
- * @param {string} url - Base URL to use for all requests
+ * Définit l'URL de base par défaut.
  */
 export function setDefaultBaseUrl(url) {
-  if (url[url.length - 1] === '/') url = url.slice(0, -1);
+  if (url.endsWith('/')) url = url.slice(0, -1);
   defaultBaseUrl = url;
 }
 
 /**
- * Perform an HTTP request with JSON support, timeout, and error handling
- *
- * @param {Object|string} options - Either a configuration object with request parameters, or a URL string (in which case defaults are applied to other parameters)
- * @param {string} options.url - Relative request URL (required)
- * @param {Object|null} [options.data=null] - Data to send (body or query string)
- * @param {string|null} [options.method=null] - HTTP method (GET, POST, etc.)
- * @param {Object} [options.headers={}] - Additional headers
- * @param {number} [options.timeout=5000] - Timeout in milliseconds
- * @param {string|null} [options.baseUrl=null] - Custom base URL for this request
- * @returns {Object} - { request: Promise, abort: Function }
+ * Effectue une requête HTTP JSON avec gestion des erreurs et timeout.
  */
 export function fetchJson(options) {
   if (typeof options === 'string') {
@@ -52,11 +41,13 @@ export function fetchJson(options) {
   if (typeof url !== 'string') throw new Error('The URL must be a string.');
   const theMethod = method ? method.toUpperCase() : (data ? 'POST' : 'GET');
 
+  // Construction de l’URL complète
   let fullUrl;
   if (url.startsWith('http://') || url.startsWith('https://')) {
     fullUrl = url;
   } else {
-    fullUrl = (baseUrl ?? defaultBaseUrl) + (url.startsWith('/') ? url : '/' + url);
+    const base = baseUrl !== null ? (baseUrl ?? defaultBaseUrl) : '';
+    fullUrl = base + (url.startsWith('/') ? url : '/' + url);
   }
 
   if (theMethod === 'GET' && data) {
@@ -65,46 +56,44 @@ export function fetchJson(options) {
   }
 
   const allHeaders = { ...defaultHeaders, ...headers };
-
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
   const signal = controller.signal;
-
   const body = theMethod !== 'GET' && data ? JSON.stringify(data) : null;
 
   const request = new Promise((resolve, reject) => {
     fetch(fullUrl, { method: theMethod, headers: allHeaders, body, signal })
       .then(resp => {
         clearTimeout(timeoutId);
-        const respClone = resp.clone();
+        const clone = resp.clone();
         return resp.json()
-          .then(data => {
+          .then(json => {
             if (!resp.ok) {
-              reject({ status: resp.status, statusText: resp.statusText, data });
+              reject({ status: resp.status, statusText: resp.statusText, data: json });
             } else {
-              resolve(data);
+              resolve(json);
             }
           })
           .catch(() => {
-            return respClone.text()
+            return clone.text()
               .then(() => reject({
                 status: resp.status,
-                statusText: 'Error parsing response body as JSON',
+                statusText: 'Erreur JSON dans la réponse',
                 data: null,
               }))
               .catch(() => reject({
-                  status: resp.status,
-                  statusText: 'Error parsing response body',
-                  data: null,
+                status: resp.status,
+                statusText: 'Réponse illisible',
+                data: null,
               }));
           });
       })
       .catch(err => {
         clearTimeout(timeoutId);
         if (err.name === 'AbortError') {
-          reject({ status: 0, statusText: 'Request aborted (timeout)', data: null });
+          reject({ status: 0, statusText: 'Timeout ou annulation', data: null });
         } else {
-          reject({ status: 0, statusText: err.message || 'Network error', data: null });
+          reject({ status: 0, statusText: err.message || 'Erreur réseau', data: null });
         }
       });
   });

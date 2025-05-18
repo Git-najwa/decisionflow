@@ -56,16 +56,20 @@ function loadStep(stepId) {
 
 // Initial load
 onMounted(() => {
-  loadStep(route.params.stepId);
+  const stepId = route.params.stepId;
+  localStorage.setItem('currentStepId', stepId); // Stocker l'ID de l'étape actuelle
+  loadStep(stepId);
 });
 
 // Recharger quand l’ID de l’étape change dans l’URL
 watch(() => route.params.stepId, (newStepId) => {
+  localStorage.setItem('currentStepId', newStepId); // Mettre à jour l'ID de l'étape
   loadStep(newStepId);
 });
 
 // Navigation vers la prochaine étape
 function goToNextStep(nextStepId) {
+  localStorage.setItem('currentStepId', nextStepId); // Mettre à jour l'ID de l'étape
   console.debug('➡️ Navigation vers step', nextStepId);
   router.push(`/scenarios/${route.params.id}/step/${nextStepId}`);
 }

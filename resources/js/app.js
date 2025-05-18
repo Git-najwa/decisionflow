@@ -2,33 +2,37 @@ import { createApp } from 'vue';
 import { setDefaultHeaders, setDefaultBaseUrl } from '@/utils/fetchJson.js';
 import App from './App.vue';
 
-// Configuration Axios globale
 function configureHttpClient() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-    const apiBaseUrl = document.querySelector('meta[name="api-base-url"]')?.content || '';
-    
+
+    // Définir les headers par défaut
     setDefaultHeaders({
         'X-CSRF-TOKEN': csrfToken,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     });
-    
-    setDefaultBaseUrl(apiBaseUrl);
-    
+
+    // Définir l'URL de base pour toutes les requêtes API
+    setDefaultBaseUrl('/api');
+
+    // Ajouter le token d'autorisation si présent
+    const token = localStorage.getItem('token');
+    if (token) {
+        setDefaultHeaders({
+            Authorization: `Bearer ${token}`,
+        });
+    }
+
     if (import.meta.env.DEV) {
         console.debug('[Config] CSRF Token:', csrfToken);
-        console.debug('[Config] API Base URL:', apiBaseUrl);
+        console.debug('[Config] API Base URL:', '/api');
+        console.debug('[Config] Authorization Token:', token);
     }
 }
 
-// Initialisation de l'app
 function initializeVueApp() {
     const app = createApp(App);
-    
-    // Configuration globale
-    app.config.globalProperties.$apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    
-    // Mount avec gestion d'erreur
+
     try {
         app.mount('#app');
     } catch (error) {
@@ -45,6 +49,6 @@ function initializeVueApp() {
     }
 }
 
-// Lancement
+// Configurer le client HTTP et initialiser l'application Vue
 configureHttpClient();
 initializeVueApp();

@@ -17,8 +17,7 @@ const loading = ref(true);
 
 onMounted(() => {
   const { request } = fetchJson({
-    url: '/api/test',  // ✅ route API correcte
-    baseUrl: null      // ✅ désactive tout préfixe auto
+    url: '/test',  // route API correcte
   });
 
   request

@@ -10,5 +10,5 @@
 <script setup>
 import { useFetchJson } from '@/composables/useFetchJson';
 
-const { data, error, loading } = useFetchJson('/api/scenarios');
+const { data, error, loading } = useFetchJson('/scenarios');
 </script>

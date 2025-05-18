@@ -23,31 +23,35 @@ export function useFetchJson(options) {
   const loading = ref(true);
 
   const token = localStorage.getItem('token');
-  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-  // 🔧 Si options est une string, on le convertit
+  // Si options est une chaîne, on la convertit en objet
   if (typeof options === 'string') {
     options = { url: options };
   }
 
-  // 🔐 Ajout automatique des headers d’auth
+  // Ajout automatique des headers d'authentification
   options.headers = {
     ...(options.headers || {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+    'Accept': 'application/json',
   };
 
+  // Debug : Vérification du token envoyé
+  console.log("Token envoyé dans le header :", token);
+
   const { request, abort } = fetchJson(options);
+
   request
     .then(res => {
       data.value = res;
-      loading.value = false;
     })
     .catch(err => {
       if (err?.status === 401) {
-        window.location.href = '/login';
+        window.location.href = '/login'; // Redirection si non authentifié
       }
       error.value = err;
+    })
+    .finally(() => {
       loading.value = false;
     });
 

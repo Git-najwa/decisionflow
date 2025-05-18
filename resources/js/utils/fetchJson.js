@@ -41,12 +41,12 @@ export function fetchJson(options) {
   if (typeof url !== 'string') throw new Error('The URL must be a string.');
   const theMethod = method ? method.toUpperCase() : (data ? 'POST' : 'GET');
 
-  // Construction de l’URL complète
+  // Construction de l'URL complète
   let fullUrl;
   if (url.startsWith('http://') || url.startsWith('https://')) {
     fullUrl = url;
   } else {
-    const base = baseUrl !== null ? (baseUrl ?? defaultBaseUrl) : '';
+    const base = baseUrl ?? defaultBaseUrl;
     fullUrl = base + (url.startsWith('/') ? url : '/' + url);
   }
 

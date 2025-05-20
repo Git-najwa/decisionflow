@@ -29,6 +29,9 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const email = ref('');
 const password = ref('');
@@ -65,10 +68,13 @@ async function handleLogin() {
 
     localStorage.setItem('token', data.token);
     console.log('Token stocké dans localStorage :', data.token);
-    emit('logged-in');
+
+    // Redirection après succès
+    router.push('/scenarios');
   } catch (err) {
     error.value = 'Erreur de connexion';
     console.error('Erreur lors du login :', err);
   }
 }
+
 </script>
